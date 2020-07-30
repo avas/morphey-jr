@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.IO;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace DiscordBotPlayground
@@ -29,6 +30,7 @@ namespace DiscordBotPlayground
 
         private void HandleProcessExit(object sender, EventArgs e)
         {
+            // TODO: implement some other way to gracefully stop the Discord API connection (e.g. by entering some console command)
             var task = _discordClient.StopAsync();
         }
 
@@ -64,6 +66,7 @@ namespace DiscordBotPlayground
             return new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json")
+                .AddUserSecrets(Assembly.GetExecutingAssembly(), optional: true)
                 .Build();
         }
 
